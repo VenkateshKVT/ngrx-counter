@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
+import { AppState } from 'src/app/store/app.state';
 import { customIncrement } from '../state/counter.action';
 import { getChannelName } from '../state/counter.selector';
 import { CounterState } from '../state/counter.state';
@@ -13,7 +14,7 @@ export class CustomCounterInputComponent implements OnInit {
 
   public value: number;
   public channelName: string;
-  constructor(private store: Store<{counter: CounterState}>) { }
+  constructor(private store: Store<AppState>) { }
   ngOnInit(): void {
     this.store.select(getChannelName).subscribe((data) => {
       this.channelName = data;
