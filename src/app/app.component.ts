@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
-import { getLoading } from './store/shared/shared.selector';
+import { getErrorMessage, getLoading } from './store/shared/shared.selector';
 
 @Component({
   selector: 'app-root',
@@ -11,12 +11,13 @@ import { getLoading } from './store/shared/shared.selector';
 export class AppComponent implements OnInit {
   title = 'ngrx-counter';
   showLoading: Observable<boolean>;
-
+  showErrorMessage: Observable<String>;
   constructor(private store: Store) {
     
   }
   ngOnInit() {
     this.showLoading = this.store.select(getLoading);
+    this.showErrorMessage = this.store.select(getErrorMessage);
   }
 }
 

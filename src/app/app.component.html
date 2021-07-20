@@ -2,6 +2,7 @@
     <div class="row">
         <app-header></app-header>
         <div class="col-md-12 text-center">
+            <div class="alert alert-danger" *ngIf="(showErrorMessage | async) as error">{{ error }}</div>
             <router-outlet></router-outlet>
         </div>
         <app-loading-spinner *ngIf="showLoading | async"></app-loading-spinner>
