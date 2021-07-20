@@ -1,7 +1,9 @@
 import { HttpClient } from "@angular/common/http";
-import { Inject, Injectable, InjectionToken  } from "@angular/core";
+import { Injectable  } from "@angular/core";
+import { Store } from "@ngrx/store";
 import { Observable } from "rxjs";
 import { environment } from "src/environments/environment";
+import { autologout } from "../auth/state/auth.actions";
 import { AuthResponseData } from "../models/AuthResponseData.models";
 import { User } from "../models/user.model";
 
@@ -10,8 +12,8 @@ import { User } from "../models/user.model";
 })
 
 export class AuthService {
-
-    constructor(private _http: HttpClient) {
+    timeInterval: any;
+    constructor(private _http: HttpClient, private store: Store) {
 
     }
 
@@ -44,5 +46,38 @@ export class AuthService {
             `https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=${environment.FIRBASE_API_KEY}`,
             { email, password, returnSecureToken: true }
           );
+    }
+
+    setUserDataInLocalStorage(user: User) {
+        localStorage.setItem('userData', JSON.stringify(user));
+        this.runTimeoutInterval(user);
+    }
+
+    runTimeoutInterval(user: User) {
+        const currentTime = new Date().getTime(); 
+        const expireTime = user.expireDate.getTime();
+        this.timeInterval = expireTime - currentTime;
+        setTimeout(() => {
+            this.store.dispatch(autologout());
+        }, this.timeInterval);
+    }
+    getUserFromLocalStorage() {
+        const userDataString = (localStorage.getItem('userData')) ? localStorage.getItem('userData') : null;
+        if(userDataString) {
+            const userData = JSON.parse(userDataString);
+            const expirationDate = new Date(userData.expirationDate);
+            const user = new User(userData.email, userData.token, userData.localId, expirationDate);
+            this.runTimeoutInterval(user);
+            return user;
+        }
+        return null;
+    }
+
+    logout() {
+        localStorage.removeItem('userData');
+        if(this.timeInterval) {
+            clearTimeout(this.timeInterval);
+            this.timeInterval = null;
+        }
     }
 }

@@ -24,7 +24,7 @@ import { appReducer } from './store/app.state';
   imports: [
     BrowserModule,
     StoreModule.forRoot(appReducer),
-    EffectsModule.forRoot([]),
+    EffectsModule.forRoot([AuthEffects]),
     StoreDevtoolsModule.instrument({
       // maxAge: 25, // Retains last 25 states
       logOnly: environment.production, // Restrict extension to log-only mode
