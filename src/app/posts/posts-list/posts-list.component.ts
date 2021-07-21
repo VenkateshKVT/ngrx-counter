@@ -22,11 +22,10 @@ export class PostsListComponent implements OnInit {
     this.store.dispatch(loadPosts());
   }
 
-  onDelete(id: string|undefined) {
+  onDelete(id: string) {
     if(confirm('Are you sure you want to delete ? ')) {
       console.log("Delete the post");
       this.store.dispatch(deletePost({ id }));
-      // this.store.dispatch(updatePost({ post }));
     }
   }
 
