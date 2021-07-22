@@ -13,18 +13,15 @@ const _postsReducer = createReducer(
         }
     }),
     on(updatePostSuccess, (state: any, action: any) => {
-        console.log("upadtedPost =>", action);
         const updatedPost = state.posts.map((post: any) => {
             return action.post.id === post.id ? action.post : post;
         });
-        console.log('updatedposts => ', updatedPost);
         return {
             ...state,
             posts: updatedPost,
         }
     }),
     on(deletePostsSuccess, (state: any, action: any) => {
-      console.log("deletePost reducer =>", action);
       const updatedPosts = state.posts.filter((post: any) => {
             return post.id !== action.id; 
       })

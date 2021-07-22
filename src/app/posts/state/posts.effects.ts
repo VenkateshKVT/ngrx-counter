@@ -1,7 +1,8 @@
 import { Injectable } from "@angular/core";
+import { Router } from "@angular/router";
 import { Actions, createEffect, ofType } from "@ngrx/effects";
 import { Observable, of } from "rxjs";
-import { map, mergeMap, switchMap } from "rxjs/operators";
+import { map, mergeMap, switchMap, tap } from "rxjs/operators";
 import { Post } from "src/app/models/posts.models";
 import { PostsService } from "src/app/services/posts.service";
 import { addPost, addPostSuccess, deletePost, deletePostsSuccess, loadPosts, loadPostSuccess, LOAD_POSTS_SUCCESS, updatePost, updatePostSuccess } from "./posts.actions";
@@ -9,7 +10,8 @@ import { addPost, addPostSuccess, deletePost, deletePostsSuccess, loadPosts, loa
 @Injectable()
 
 export class PostsEffects {
-    constructor(private actions$: Actions, private postsService: PostsService) {
+    constructor(private actions$: Actions, private postsService: PostsService, private router: Router) {
+        
 
     }
 
@@ -52,6 +54,15 @@ export class PostsEffects {
             })
         )
     });
+
+    updatePostSuccess$ = createEffect(() => {
+        return this.actions$.pipe(
+            ofType(updatePostSuccess),
+            tap(() => {
+                this.router.navigate(['/posts']);
+            })
+        )
+    })
 
     deletePost$ = createEffect(() => {
         return this.actions$.pipe(
