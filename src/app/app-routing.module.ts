@@ -1,6 +1,7 @@
 import { NgModule } from "@angular/core";
 import { RouterModule, Routes } from "@angular/router";
 import { HomeComponent } from "./home/home.component";
+import { SinglePostComponent } from "./posts/single-post/single-post.component";
 import { AuthGuard } from "./services/auth.guard";
 
 
@@ -21,6 +22,10 @@ const routes: Routes = [
         path: 'posts',
         loadChildren: () => import('./posts/posts.module').then(m => m.PostsModule),
         canActivate: [AuthGuard]
+    },
+    {
+        path: 'posts/details/:id',
+        component: SinglePostComponent
     }
 ]
 
